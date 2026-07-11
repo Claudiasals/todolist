@@ -41,10 +41,12 @@ const aggiungiNuovaAttivita = () => {
   attivitagiornaliere.value.push(
 {
   id: Date.now(),
-  todo: nuovaAttivita.value.trim,
+  todo: nuovaAttivita.value.trim(),
   completata: false
 }
 );
+  nuovaAttivita.value = "";
+  divAggiungiNuovaAttivita.value = false;
 };
 
 
