@@ -48,6 +48,7 @@ const aggiungiNuovaAttivita = () => {
 };
 
 
+
 </script>
 
 <template>
@@ -89,13 +90,13 @@ const aggiungiNuovaAttivita = () => {
         <h2>Completate</h2>
       </header>
       <div
-        class="elemento-lista"
+        class="elemento-lista "
         v-for="attivita in attivitaCompletate"
         :key="attivita.id"
       >
         <input type="checkbox" v-model="attivita.completata" />
 
-        <span>{{ attivita.todo }}</span>
+        <span class="elemento-lista-completate">{{ attivita.todo }}</span>
       </div>
     </div>
   </main>
