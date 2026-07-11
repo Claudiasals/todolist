@@ -8,28 +8,26 @@ const STORAGE_KEY = "attivita-giornaliere";
 
 const datiSalvati = localStorage.getItem(STORAGE_KEY);
 
-const attivitagiornaliere = ref(datiSalvati ? JSON.parse(datiSalvati) : []);
+const attivitaGiornaliere = ref(datiSalvati ? JSON.parse(datiSalvati) : []);
 
 const divAggiungiNuovaAttivita = ref(false);
 
 const nuovaAttivita = ref("");
 
-
-
 watch(
-  attivitagiornaliere,
+  attivitaGiornaliere,
   (nuovoValore) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nuovoValore));
   },
   { deep: true },
 );
 
-const attivitacompletate = computed(() => {
-  return attivitagiornaliere.value.filter((attivita) => attivita.completata);
+const attivitaCompletate = computed(() => {
+  return attivitaGiornaliere.value.filter((attivita) => attivita.completata);
 });
 
-const attivitadacompletare = computed(() => {
-  return attivitagiornaliere.value.filter(
+const attivitaDaCompletare = computed(() => {
+  return attivitaGiornaliere.value.filter(
     (attivita) => attivita.completata === false,
   );
 });
@@ -38,7 +36,7 @@ const aggiungiNuovaAttivita = () => {
   if (nuovaAttivita.value.trim() === "") {
     return;
   } 
-  attivitagiornaliere.value.push(
+  attivitaGiornaliere.value.push(
 {
   id: Date.now(),
   todo: nuovaAttivita.value.trim(),
@@ -73,7 +71,7 @@ const aggiungiNuovaAttivita = () => {
 
       <div
         class="elemento-lista"
-        v-for="attivita in attivitadacompletare"
+        v-for="attivita in attivitaDaCompletare"
         :key="attivita.id"
       > 
         <input type="checkbox" v-model="attivita.completata" />
@@ -92,7 +90,7 @@ const aggiungiNuovaAttivita = () => {
       </header>
       <div
         class="elemento-lista"
-        v-for="attivita in attivitacompletate"
+        v-for="attivita in attivitaCompletate"
         :key="attivita.id"
       >
         <input type="checkbox" v-model="attivita.completata" />
