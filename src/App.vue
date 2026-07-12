@@ -10,6 +10,10 @@ const datiSalvati = localStorage.getItem(STORAGE_KEY);
 
 const attivitaGiornaliere = ref(datiSalvati ? JSON.parse(datiSalvati) : []);
 
+const chiudiNuovaAttivita = () => {
+  divAggiungiNuovaAttivita.value = false;
+};
+
 const divAggiungiNuovaAttivita = ref(false);
 
 const nuovaAttivita = ref("");
@@ -47,7 +51,11 @@ const aggiungiNuovaAttivita = () => {
   divAggiungiNuovaAttivita.value = false;
 };
 
-
+const eliminaAttivita = (idDaEliminare) => {
+attivitaGiornaliere.value = attivitaGiornaliere.value.filter(
+  (attivita) => attivita.id !== idDaEliminare
+);
+} 
 
 </script>
 
@@ -56,15 +64,15 @@ const aggiungiNuovaAttivita = () => {
     <h1>Attività giornaliere</h1>
   </header>
 
-  <main class="contenitore">
+  <main class="contenitore"  @click="chiudiNuovaAttivita">
     <div class="card">
       <header class="header-card">
         <h2>Da fare</h2>
 
-        <PhPlusCircle :size="32" @click="divAggiungiNuovaAttivita = true" />
+        <PhPlusCircle :size="32" @click.stop="divAggiungiNuovaAttivita = true" />
       </header>
 
-      <div  v-if="divAggiungiNuovaAttivita" class="elemento-lista">
+      <div  v-if="divAggiungiNuovaAttivita" class="elemento-lista"   @click.stop>
         <input type="text" v-model="nuovaAttivita" placeholder="Scrivi una nuova attività" />
 
         <button type="button" @click="aggiungiNuovaAttivita">Conferma</button>
@@ -80,8 +88,8 @@ const aggiungiNuovaAttivita = () => {
         <span>{{ attivita.todo }}</span>
         <!-- {{...}} interpolazione Mustache: x stampare un dato dentro i ltemplate-->
 
-        <PhPencil :size="32" />
-        <PhTrash :size="32" />
+        <PhPencil :size="22"/>
+        <PhTrash :size="22"  @click="eliminaAttivita(attivita.id)"/>
       </div>
     </div>
 
