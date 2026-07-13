@@ -63,3 +63,14 @@ h1 {
 .elemento-lista-completate {
   text-decoration: line-through;
 }
+
+.modifica-inline {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  outline: 2px solid rgb(44, 44, 143);
+  border-radius: 4px;
+  padding: 2px 4px;
+}

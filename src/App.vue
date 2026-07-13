@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, nextTick } from "vue";
 import { PhPlusCircle, PhPencil, PhTrash } from "@phosphor-icons/vue";
 
 
@@ -57,6 +57,18 @@ attivitaGiornaliere.value = attivitaGiornaliere.value.filter(
 );
 } 
 
+const idAttivitaDaModificare = ref(null);
+
+const modificaAttivita = (idDaModificare) => {
+  idAttivitaDaModificare.value = idDaModificare;
+
+}
+
+const confermaModifica = () => {
+idAttivitaDaModificare.value = null;
+
+}
+
 </script>
 
 <template>
@@ -85,10 +97,13 @@ attivitaGiornaliere.value = attivitaGiornaliere.value.filter(
       > 
         <input type="checkbox" v-model="attivita.completata" />
 
-        <span>{{ attivita.todo }}</span>
-        <!-- {{...}} interpolazione Mustache: x stampare un dato dentro i ltemplate-->
+        <span v-if="idAttivitaDaModificare  !== attivita.id">{{ attivita.todo }}</span>
+        <input v-else v-model="attivita.todo" type="text" />
+         
 
-        <PhPencil :size="22"/>
+        <PhPencil :size="22" v-if="idAttivitaDaModificare  !== attivita.id" @click="modificaAttivita(attivita.id)"/>
+        <button v-else type="button" @click="confermaModifica">Conferma</button>
+
         <PhTrash :size="22"  @click="eliminaAttivita(attivita.id)"/>
       </div>
     </div>
