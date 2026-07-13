@@ -1,5 +1,28 @@
 # Vue 3 + Vite
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Progetto realizzato per esercitarmi con Vue 3 e approfondirne i concetti principali.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+L’applicazione permette di:
+
+- aggiungere nuove attività;
+- segnare le attività come completate;
+- modificare il testo di un’attività;
+- eliminare le attività;
+- salvare i dati nel localStorage.
+
+Tecnologie utilizzate
+Vue 3, Vite, JavaScript, CSS, Phosphor Icons da phosphoricons.com
+
+Concetti esercitati
+- ref
+- computed
+- watch
+- v-model
+- v-for
+- v-if e v-else
+- gestione degli eventi
+- persistenza dei dati con localStorage
+
+Funzionalità future:
+- filtri liste
+- categorie liste
