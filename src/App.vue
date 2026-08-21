@@ -1,5 +1,4 @@
-<script setup>
-import { ref, computed, watch } from "vue";
+<script>
 import {
   PhPlus,
   PhPencil,
@@ -7,81 +6,99 @@ import {
   PhListChecks,
   PhCheck,
 } from "@phosphor-icons/vue";
+
 import Sidebar from "./components/Sidebar.vue";
 
 const STORAGE_KEY = "attivita-giornaliere";
 
 const datiSalvati = localStorage.getItem(STORAGE_KEY);
 
-const categoriaSelezionata = ref("Oggi");
-
-const cambiaCategoria = (categoria) => {
-  categoriaSelezionata.value = categoria;
-};
-
-const attivitaGiornaliere = ref(datiSalvati ? JSON.parse(datiSalvati) : []);
-
-const chiudiNuovaAttivita = () => {
-  divAggiungiNuovaAttivita.value = false;
-};
-
-const divAggiungiNuovaAttivita = ref(false);
-
-const nuovaAttivita = ref("");
-
-watch(
-  attivitaGiornaliere,
-  (nuovoValore) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(nuovoValore));
+export default {
+  components: {
+    Sidebar,
+    PhPlus,
+    PhPencil,
+    PhTrash,
+    PhListChecks,
+    PhCheck,
   },
-  { deep: true },
-);
 
-const attivitaCompletate = computed(() => {
-  return attivitaGiornaliere.value.filter(
-    (attivita) => 
-    attivita.completata === true &&
-      (attivita.categoria ?? "Oggi") === categoriaSelezionata.value,
-  );
-});
+  data() {
+    return {
+      categoriaSelezionata: "Oggi",
+      attivitaGiornaliere: datiSalvati ? JSON.parse(datiSalvati) : [],
+      divAggiungiNuovaAttivita: false,
+      nuovaAttivita: "",
+      idAttivitaDaModificare: null,
+    };
+  },
 
-const attivitaDaCompletare = computed(() => {
-  return attivitaGiornaliere.value.filter(
-    (attivita) => attivita.completata === false &&
-      (attivita.categoria ?? "Oggi") === categoriaSelezionata.value,
-  );
-});
+  computed: {
+    attivitaCompletate() {
+      return this.attivitaGiornaliere.filter(
+        (attivita) =>
+          attivita.completata === true &&
+          (attivita.categoria ?? "Oggi") === this.categoriaSelezionata,
+      );
+    },
 
-const aggiungiNuovaAttivita = () => {
-  if (nuovaAttivita.value.trim() === "") {
-    return;
-  }
+    attivitaDaCompletare() {
+      return this.attivitaGiornaliere.filter(
+        (attivita) =>
+          attivita.completata === false &&
+          (attivita.categoria ?? "Oggi") === this.categoriaSelezionata,
+      );
+    },
+  },
 
-  attivitaGiornaliere.value.push({
-    id: Date.now(),
-    todo: nuovaAttivita.value.trim(),
-    completata: false,
-    categoria: categoriaSelezionata.value,
-  });
+  watch: {
+    attivitaGiornaliere: {
+      handler(nuovoValore) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nuovoValore));
+      },
+      deep: true,
+    },
+  },
 
-  nuovaAttivita.value = "";
-  divAggiungiNuovaAttivita.value = false;
-};
+  methods: {
+    cambiaCategoria(categoria) {
+      this.categoriaSelezionata = categoria;
+    },
 
-const eliminaAttivita = (idDaEliminare) => {
-  attivitaGiornaliere.value = attivitaGiornaliere.value.filter(
-    (attivita) => attivita.id !== idDaEliminare,
-  );
-};
+    chiudiNuovaAttivita() {
+      this.divAggiungiNuovaAttivita = false;
+    },
 
-const idAttivitaDaModificare = ref(null);
+    aggiungiNuovaAttivita() {
+      if (this.nuovaAttivita.trim() === "") {
+        return;
+      }
 
-const modificaAttivita = (idDaModificare) => {
-  idAttivitaDaModificare.value = idDaModificare;
-};
+      this.attivitaGiornaliere.push({
+        id: Date.now(),
+        todo: this.nuovaAttivita.trim(),
+        completata: false,
+        categoria: this.categoriaSelezionata,
+      });
 
-const confermaModifica = () => {
-  idAttivitaDaModificare.value = null;
+      this.nuovaAttivita = "";
+      this.divAggiungiNuovaAttivita = false;
+    },
+
+    eliminaAttivita(idDaEliminare) {
+      this.attivitaGiornaliere = this.attivitaGiornaliere.filter(
+        (attivita) => attivita.id !== idDaEliminare,
+      );
+    },
+
+    modificaAttivita(idDaModificare) {
+      this.idAttivitaDaModificare = idDaModificare;
+    },
+
+    confermaModifica() {
+      this.idAttivitaDaModificare = null;
+    },
+  },
 };
 </script>
 
@@ -129,9 +146,9 @@ const confermaModifica = () => {
           >
             <input type="checkbox" v-model="attivita.completata" />
 
-            <span v-if="idAttivitaDaModificare !== attivita.id">{{
-              attivita.todo
-            }}</span>
+            <span v-if="idAttivitaDaModificare !== attivita.id">
+              {{ attivita.todo }}
+            </span>
             <input v-else v-model="attivita.todo" type="text" />
 
             <PhPencil
@@ -166,4 +183,3 @@ const confermaModifica = () => {
     </div>
   </div>
 </template>
-

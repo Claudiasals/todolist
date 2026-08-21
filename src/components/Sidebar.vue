@@ -1,11 +1,30 @@
-<script setup>
+<script>
 import { PhPlus, PhTornado } from "@phosphor-icons/vue";
 
-const categorie = ["Oggi", "Lavoro", "Shopping", "Viaggi"];
+export default {
+    components: {
+        PhPlus,
+        PhTornado
+    },
 
-const emit = defineEmits(["selezionaCategoria"]);
+    emits: ["selezionaCategoria"], 
+
+    data() {
+        return {
+            categorie: ["Oggi", "Lavoro", "Shopping", "Viaggi"]
+        }
+    },
+
+    methods: {
+        selezionaCategoria(categoria) {
+            this.$emit("selezionaCategoria", categoria)
+        }    }
+}
+
 
 </script>
+
+
 
 <template>
   <aside class="sidebar-contenuto">
@@ -18,7 +37,7 @@ const emit = defineEmits(["selezionaCategoria"]);
         class="voce-lista"
         v-for="categoria in categorie"
         :key="categoria"
-        @click="emit('selezionaCategoria', categoria)"
+        @click="selezionaCategoria(categoria)"
       >
         {{ categoria }}
       </button>
